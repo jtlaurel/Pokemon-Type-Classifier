@@ -19,3 +19,36 @@ We determine our most relevant metrics to be precision and recall. High precisio
 ### Data Processing
 In order to access our model accuracy, we split our data set into 3 categories: train, validation and test. We load the images in ```X``` and cross-reference the image name with a dataframe that labels it in ```y```. We utilized a 20% train/test split and stratified the data. In addition, we created class weights using the number of images that are in the data set by category.
 
+## Model Analysis
+### Hyperparameter Tuning
+Since my computer can't handle complex grid searches, we did a 'manual' grid search and determined our most effective hyperparameters to be:
+Input Shape: (256,256,3)
+Kernel Size: (3,3)
+Pool Size: (2,2)
+Dropout: 0.25 for Convolutional Layers and 0.5 for our Dense Layers
+Activation Layer: ReLu
+Final Activation Layer: Sigmoid
+L2 Regularlizer: 0.01
+Batch Size: 16
+Class Weights: Calculated based on class distribution ratios
+
+Optimizer: Adam
+Loss: Binary Cross-Entroy
+Metrics: (Accuracy), Precision, Recall (Threshold = 0.4)
+
+### Baseline Model
+This was conducted using a dummy classifier using a stratified strategy.
+It's performance was:
+Precision: 11.72%
+Recall: 11.85%
+
+### Model Structure
+Our CNN is made up of 4 convolution layers with pooling and dropout after each layer, and 3 dense layers before classification. For multi-label classification, it is import to note that binary cross-entropy was vital in ensuring the model runs properly. 
+
+
+### Model Performance
+Our model took a significantly long time to train as it did not show signs of improvement until the 18th epoch, and took 200 epochs to achieve results I was satisfactory with. 
+
+As we can see below, our model performed better than the baseline across both metrics; however, when compared to the training data performance, we can see that our model is most likely overfit to the training set. This may have something to do with the poor model performance on testing data. 
+Test Precision: 83.90%
+Test Recall: 48.63%
