@@ -22,24 +22,38 @@ In order to access our model accuracy, we split our data set into 3 categories: 
 ## Model Analysis
 ### Hyperparameter Tuning
 Since my computer can't handle complex grid searches, we did a 'manual' grid search and determined our most effective hyperparameters to be:
+
 Input Shape: (256,256,3)
+
 Kernel Size: (3,3)
+
 Pool Size: (2,2)
+
 Dropout: 0.25 for Convolutional Layers and 0.5 for our Dense Layers
+
 Activation Layer: ReLu
+
 Final Activation Layer: Sigmoid
+
 L2 Regularlizer: 0.01
+
 Batch Size: 16
+
 Class Weights: Calculated based on class distribution ratios
 
+
 Optimizer: Adam
-Loss: Binary Cross-Entroy
+
+Loss: Binary Cross-Entropy
+
 Metrics: (Accuracy), Precision, Recall (Threshold = 0.4)
 
 ### Baseline Model
 This was conducted using a dummy classifier using a stratified strategy.
 It's performance was:
+
 Precision: 11.72%
+
 Recall: 11.85%
 
 ### Model Structure
