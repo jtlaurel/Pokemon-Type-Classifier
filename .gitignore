@@ -1,0 +1,11 @@
+#data files
+
+data/
+images/
+zippedData.zip
+
+# .ds files that mac creates
+.DS_Store
+
+# jupyter notebook checkpoints
+.ipynb_checkpoints
