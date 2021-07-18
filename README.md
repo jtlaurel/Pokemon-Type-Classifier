@@ -19,10 +19,13 @@ We determine our most relevant metrics to be precision and recall. High precisio
 ### Data Processing
 In order to access our model accuracy, we split our data set into 3 categories: train, validation and test. We load the images in ```X``` and cross-reference the image name with a dataframe that labels it in ```y```. We utilized a 20% train/test split and stratified the data. In addition, we created class weights using the number of images that are in the data set by category.
 
+### Distribution of Classes
+We can see with both Pokémon and our collection of images, that the distribution of classes is quite inbalanced with Water types being the most common and Ice types being the least common, as seen below. This will be factored into our class weights when training in order to achieve better performance.
+
 ## Model Analysis
 ### Hyperparameter Tuning
-Since my computer can't handle complex grid searches, we did a 'manual' grid search and determined our most effective hyperparameters to be:
-
+Since my machine can't handle complex grid searches, we did a 'manual' grid search and determined our most effective hyperparameters to be:
+```
 Input Shape: (256,256,3)
 
 Kernel Size: (3,3)
@@ -40,29 +43,41 @@ L2 Regularlizer: 0.01
 Batch Size: 16
 
 Class Weights: Calculated based on class distribution ratios
-
-
+```
+```
 Optimizer: Adam
 
 Loss: Binary Cross-Entropy
 
 Metrics: (Accuracy), Precision, Recall (Threshold = 0.4)
 
+Binary Cross-Entropy is vital for multilabel classification, and dropout helps us prevent overfitting. 
+```
+
 ### Baseline Model
 This was conducted using a dummy classifier using a stratified strategy.
-It's performance was:
-
+Its performance was:
+```
 Precision: 11.72%
 
 Recall: 11.85%
-
+```
 ### Model Structure
 Our CNN is made up of 4 convolution layers with pooling and dropout after each layer, and 3 dense layers before classification. For multi-label classification, it is import to note that binary cross-entropy was vital in ensuring the model runs properly. 
 
 
 ### Model Performance
-Our model took a significantly long time to train as it did not show signs of improvement until the 18th epoch, and took 200 epochs to achieve results I was satisfactory with. 
+Our model took a significantly long time to train as it did not show signs of improvement until the 18th epoch, and took 200 epochs to achieve results I was satisfied with. 
 
 As we can see below, our model performed better than the baseline across both metrics; however, when compared to the training data performance, we can see that our model is most likely overfit to the training set. This may have something to do with the poor model performance on testing data. 
+```
 Test Precision: 83.90%
+
 Test Recall: 48.63%
+
+Training Precision: 99.18%
+
+Training Recall: 85.46%
+```
+## Conclusions
+As we can see, training a model to identify Pokémon types can be achieved with a testing recall of 48.63% at a treshold of 0.4. We can achieve better recall with a lower threshold at the cost of a lower precision. With more training data and some adjustments of a model, it is possible to achieve an even higher training recall, which can be very beneficial to casual and new players. Higher recall can reduce a player's spending of real life currency by alleviating the need to revive their Pokémon.
