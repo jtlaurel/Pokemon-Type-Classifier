@@ -7,11 +7,11 @@ With the rise of Pokémon GO as a mobile game, many people that never owned old 
 Our goal with this project is to determine if we can use a convolutional neural network to determine a Pokémon's type from any image of a Pokémon in an attempt to possibly alert players when the opposing Pokémon poses a threat to the user's Pokémon. Once we train a neural network to recognize types from images, we can then hard code the type advantages as conditionals to alert the player.
 
 ## The Data
-The data is hosted on pokemondb.net/pokedex/national. We scraped 8360 images of each Pokémon with their corresponding type and name in order to create labels. We created a dataframe that could be referenced when images are being loaded, and saved each image in a folder corresponding to their types. Most of the images are 128x128 and in a .png format. Certain images that are 'official artwork' are of greater dimensions and in a .jpg format. 
+The data is hosted on pokemondb.net/pokedex/national. We scraped 8360 images of each Pokémon with their corresponding type and name in order to create labels. We created a dataframe that could be referenced when images are being loaded, and saved each image in a folder corresponding to their types. Most of the images are 128x128 and in a .png format. Certain images that are 'official artwork' are of greater dimensions and in a .jpg format. The process for scraping the data utilized ```Beautiful Soup``` and string manipulation and can be found in ```webscraping.ipynb```.
 
 ## Exploratory Data Analysis
 ### Data Cleaning
-As these are images, we had very few roadbumps during this stage of theprocess. Utilizing ```Pillow``` (Python Imaging Library), we were able to scrape the images and remove the transparency layer from them before saving them into our folders. We chose an image size of 256x256 to feed into the neural network for two reasons: most of the images are 128x128 (square), the few that aren't square are around 256x256, and we want to save as much information as possible. 
+As these are images, we had very few roadbumps during this stage of theprocess. Utilizing ```Pillow``` (Python Imaging Library), we were able to scrape the images and remove the transparency layer from them before saving them into our folders. We chose an image size of 256x256 to feed into the neural network for two reasons: most of the images are 128x128 (square), the few that aren't square are around 256x256, and we want to rpeserve as much information as possible. The process for pulling the images into folders is found in ```EDA.ipynb```.
 
 ### Relevant Metrics
 We determine our most relevant metrics to be precision and recall. High precision will help determine 'bad switches', or falsely switching Pokémon when there is no threat, and High recall will help determine bad ‘stay-ins’ or failing to identify a threat that most likely results in your Pokémon being defeated. Although they provide free revives for your fainted Pokémon by playing daily, players that play more frequently will likely run out. It's important for us to maximize recall as this will most likely result in a fainted Pokémon and can possibly cost a player real-life currency.
@@ -21,10 +21,12 @@ In order to access our model accuracy, we split our data set into 3 categories: 
 
 ### Distribution of Classes
 We can see with both Pokémon and our collection of images, that the distribution of classes is quite inbalanced with Water types being the most common and Ice types being the least common, as seen below. This will be factored into our class weights when training in order to achieve better performance.
+![](https://github.com/jtlaurel/Pokemon-Type-Classifier/blob/main/plots/type_distribution.png)
+![](https://github.com/jtlaurel/Pokemon-Type-Classifier/blob/main/plots/image_distribution.png)
 
 ## Model Analysis
 ### Hyperparameter Tuning
-Since my machine can't handle complex grid searches, we did a 'manual' grid search and determined our most effective hyperparameters to be:
+The process for both modeling and processing the data can be found in ```final_model.ipynb```. Since my machine can't handle complex grid searches, we did a 'manual' grid search and determined our most effective hyperparameters to be:
 ```
 Input Shape: (256,256,3)
 
@@ -80,4 +82,4 @@ Training Precision: 99.18%
 Training Recall: 85.46%
 ```
 ## Conclusions
-As we can see, training a model to identify Pokémon types can be achieved with a testing recall of 48.63% at a treshold of 0.4. We can achieve better recall with a lower threshold at the cost of a lower precision. With more training data and some adjustments of a model, it is possible to achieve an even higher training recall, which can be very beneficial to casual and new players. Higher recall can reduce a player's spending of real life currency by alleviating the need to revive their Pokémon.
+As we can see, training a model to identify Pokémon types can be achieved with a testing recall of 48.63% at a treshold of 0.4. We can achieve better recall with a lower threshold at the cost of a lower precision. With more training data and some adjustments of a model, it is possible to achieve an even higher training recall, which can be very beneficial to casual and new players. Higher recall can reduce a player's spending of real life currency by alleviating the need to revive their Pokémon if we were to create and implement a Pokémon detection software for players.
